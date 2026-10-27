@@ -1,0 +1,422 @@
+# PrimeCam focal-plane configurations.
+# Add future frequency modules under "modules".
+
+modules:
+  f280:
+    detector:
+      band_name: f280
+      n_pixels: 1728          # Physical pixel locations; two detectors per pixel.
+      pixel_size_mm: 2.75
+      rhombus_gap_mm: 5.5
+      bandcenter_ghz: 280.0
+      bandwidth_ghz: 60.0
+      fwhm_arcmin: 0.78
+      sample_rate_hz: 488.0   
+
+      polarization:
+        offset_deg: 60.0
+        even_row_deg: 0.0
+        odd_row_deg: 45.0
+        detector_b_offset_deg: 90.0
+
+      psd:
+        net_uk_sqrt_s: 1183.96
+        fmin_hz: 0.001
+        fknee_hz: 1.0
+        alpha: 1.0
+
+    module:
+      name: primecam_f280
+      plate_scale_deg_per_mm: 0.004939  # 17.78 arcsec/mm
+      # plate_scale_deg_per_mm: 0.003858 # fyst-trajectories
+      wafer_center_distance_mm: 72.34
+      wafer_center_angle_deg: 120.0
+      center_rotation_deg: -90.0
+      rotation_axis: [0.0, 0.0, 1.0]
+
+      wafers:
+        - name: w1
+          position: 0
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w2
+          position: 1
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w3
+          position: 2
+          rotation_deg: -60.0
+          kill:
+            enabled: false
+            row_offsets: []
+
+    output:
+      out_dir: ../fp_files
+      file: "{name}_dettable.h5"
+      table_path: dettable_stack
+      overwrite: true
+
+  f350:
+    detector:
+      band_name: f350
+      n_pixels: 1728          # Physical pixel locations; two detectors per pixel.
+      pixel_size_mm: 2.75
+      rhombus_gap_mm: 5.5
+      bandcenter_ghz: 350.0
+      bandwidth_ghz: 60.0
+      fwhm_arcmin: 0.78
+      sample_rate_hz: 488.0   
+
+      polarization:
+        offset_deg: 60.0
+        even_row_deg: 0.0
+        odd_row_deg: 45.0
+        detector_b_offset_deg: 90.0
+
+      psd:
+        net_uk_sqrt_s: 1183.96
+        fmin_hz: 0.001
+        fknee_hz: 1.0
+        alpha: 1.0
+
+    module:
+      name: primecam_f350
+      plate_scale_deg_per_mm: 0.004939  # 17.78 arcsec/mm
+      wafer_center_distance_mm: 72.34
+      wafer_center_angle_deg: 120.0
+      center_rotation_deg: -90.0
+      rotation_axis: [0.0, 0.0, 1.0]
+
+      wafers:
+        - name: w1
+          position: 0
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w2
+          position: 1
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w3
+          position: 2
+          rotation_deg: -60.0
+          kill:
+            enabled: false
+            row_offsets: []
+
+    output:
+      out_dir: ../fp_files
+      file: "{name}_dettable.h5"
+      table_path: dettable_stack
+      overwrite: true
+
+  f420:
+    detector:
+      band_name: f420
+      n_pixels: 1728          # Physical pixel locations; two detectors per pixel.
+      pixel_size_mm: 2.75
+      rhombus_gap_mm: 5.5
+      bandcenter_ghz: 350.0
+      bandwidth_ghz: 60.0
+      fwhm_arcmin: 0.78
+      sample_rate_hz: 488.0   
+
+      polarization:
+        offset_deg: 60.0
+        even_row_deg: 0.0
+        odd_row_deg: 45.0
+        detector_b_offset_deg: 90.0
+
+      psd:
+        net_uk_sqrt_s: 1183.96
+        fmin_hz: 0.001
+        fknee_hz: 1.0
+        alpha: 1.0
+
+    module:
+      name: primecam_f420
+      plate_scale_deg_per_mm: 0.004939  # 17.78 arcsec/mm
+      wafer_center_distance_mm: 72.34
+      wafer_center_angle_deg: 120.0
+      center_rotation_deg: -90.0
+      rotation_axis: [0.0, 0.0, 1.0]
+
+      wafers:
+        - name: w1
+          position: 0
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w2
+          position: 1
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w3
+          position: 2
+          rotation_deg: -60.0
+          kill:
+            enabled: false
+            row_offsets: []
+
+    output:
+      out_dir: ../fp_files
+      file: "{name}_dettable.h5"
+      table_path: dettable_stack
+      overwrite: true
+
+  f850:
+    detector:
+      band_name: f850
+      n_pixels: 1728          # Physical pixel locations; two detectors per pixel.
+      pixel_size_mm: 2.75
+      rhombus_gap_mm: 5.5
+      bandcenter_ghz: 350.0
+      bandwidth_ghz: 60.0
+      fwhm_arcmin: 0.78
+      sample_rate_hz: 488.0   
+
+      polarization:
+        offset_deg: 60.0
+        even_row_deg: 0.0
+        odd_row_deg: 45.0
+        detector_b_offset_deg: 90.0
+
+      psd:
+        net_uk_sqrt_s: 1183.96
+        fmin_hz: 0.001
+        fknee_hz: 1.0
+        alpha: 1.0
+
+    module:
+      name: primecam_f850
+      plate_scale_deg_per_mm: 0.004939  # 17.78 arcsec/mm
+      wafer_center_distance_mm: 72.34
+      wafer_center_angle_deg: 120.0
+      center_rotation_deg: -90.0
+      rotation_axis: [0.0, 0.0, 1.0]
+
+      wafers:
+        - name: w1
+          position: 0
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w2
+          position: 1
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w3
+          position: 2
+          rotation_deg: -60.0
+          kill:
+            enabled: false
+            row_offsets: []
+
+    output:
+      out_dir: ../fp_files
+      file: "{name}_dettable.h5"
+      table_path: dettable_stack
+      overwrite: true
+
+  f_fake1:
+    detector:
+      band_name: f_fake1
+      n_pixels: 1728          # Physical pixel locations; two detectors per pixel.
+      pixel_size_mm: 2.75
+      rhombus_gap_mm: 5.5
+      bandcenter_ghz: 280.0
+      bandwidth_ghz: 60.0
+      fwhm_arcmin: 0.78
+      sample_rate_hz: 488.0   
+
+      polarization:
+        offset_deg: 60.0
+        even_row_deg: 0.0
+        odd_row_deg: 45.0
+        detector_b_offset_deg: 90.0
+
+      psd:
+        net_uk_sqrt_s: 1183.96
+        fmin_hz: 0.001
+        fknee_hz: 1.0
+        alpha: 1.0
+
+    module:
+      name: primecam_f_fake1
+      plate_scale_deg_per_mm: 0.004939  # 17.78 arcsec/mm
+      # plate_scale_deg_per_mm: 0.003858 # fyst-trajectories
+      wafer_center_distance_mm: 72.34
+      wafer_center_angle_deg: 120.0
+      center_rotation_deg: -90.0
+      rotation_axis: [0.0, 0.0, 1.0]
+
+      wafers:
+        - name: w1
+          position: 0
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w2
+          position: 1
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w3
+          position: 2
+          rotation_deg: -60.0
+          kill:
+            enabled: false
+            row_offsets: []
+
+    output:
+      out_dir: ../fp_files
+      file: "{name}_dettable.h5"
+      table_path: dettable_stack
+      overwrite: true
+
+  f_fake2:
+    detector:
+      band_name: f_fake2
+      n_pixels: 1728          # Physical pixel locations; two detectors per pixel.
+      pixel_size_mm: 2.75
+      rhombus_gap_mm: 5.5
+      bandcenter_ghz: 280.0
+      bandwidth_ghz: 60.0
+      fwhm_arcmin: 0.78
+      sample_rate_hz: 488.0   
+
+      polarization:
+        offset_deg: 60.0
+        even_row_deg: 0.0
+        odd_row_deg: 45.0
+        detector_b_offset_deg: 90.0
+
+      psd:
+        net_uk_sqrt_s: 1183.96
+        fmin_hz: 0.001
+        fknee_hz: 1.0
+        alpha: 1.0
+
+    module:
+      name: primecam_f_fake2
+      plate_scale_deg_per_mm: 0.004939  # 17.78 arcsec/mm
+      # plate_scale_deg_per_mm: 0.003858 # fyst-trajectories
+      wafer_center_distance_mm: 72.34
+      wafer_center_angle_deg: 120.0
+      center_rotation_deg: -90.0
+      rotation_axis: [0.0, 0.0, 1.0]
+
+      wafers:
+        - name: w1
+          position: 0
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w2
+          position: 1
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w3
+          position: 2
+          rotation_deg: -60.0
+          kill:
+            enabled: false
+            row_offsets: []
+
+    output:
+      out_dir: ../fp_files
+      file: "{name}_dettable.h5"
+      table_path: dettable_stack
+      overwrite: true
+
+  f_fake3:
+    detector:
+      band_name: f_fake3
+      n_pixels: 1728          # Physical pixel locations; two detectors per pixel.
+      pixel_size_mm: 2.75
+      rhombus_gap_mm: 5.5
+      bandcenter_ghz: 280.0
+      bandwidth_ghz: 60.0
+      fwhm_arcmin: 0.78
+      sample_rate_hz: 488.0   
+
+      polarization:
+        offset_deg: 60.0
+        even_row_deg: 0.0
+        odd_row_deg: 45.0
+        detector_b_offset_deg: 90.0
+
+      psd:
+        net_uk_sqrt_s: 1183.96
+        fmin_hz: 0.001
+        fknee_hz: 1.0
+        alpha: 1.0
+
+    module:
+      name: primecam_f_fake3
+      plate_scale_deg_per_mm: 0.004939  # 17.78 arcsec/mm
+      # plate_scale_deg_per_mm: 0.003858 # fyst-trajectories
+      wafer_center_distance_mm: 72.34
+      wafer_center_angle_deg: 120.0
+      center_rotation_deg: -90.0
+      rotation_axis: [0.0, 0.0, 1.0]
+
+      wafers:
+        - name: w1
+          position: 0
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w2
+          position: 1
+          rotation_deg: -60.0
+          kill:
+            enabled: true
+            row_offsets: [9, 10]
+
+        - name: w3
+          position: 2
+          rotation_deg: -60.0
+          kill:
+            enabled: false
+            row_offsets: []
+
+    output:
+      out_dir: ../fp_files
+      file: "{name}_dettable.h5"
+      table_path: dettable_stack
+      overwrite: true
+
+
