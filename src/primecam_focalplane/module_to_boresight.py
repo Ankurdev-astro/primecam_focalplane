@@ -22,7 +22,7 @@ from fyst_trajectories import get_primecam_offset
 from toast.instrument_coords import xieta_to_quat
 
 
-DEFAULT_CONFIG_PATH = Path(__file__).with_name("fp_config.yaml")
+DEFAULT_CONFIG_PATH = Path(__file__).with_name("fp_files") / "fp_config.yaml"
 DEFAULT_TABLE_PATH = "dettable_stack"
 
 # Provisional deployment assignment: the instrument module name comes from the

@@ -57,7 +57,7 @@ modules:
             row_offsets: []
 
     output:
-      out_dir: ../fp_files
+      out_dir: tables
       file: "{name}_dettable.h5"
       table_path: dettable_stack
       overwrite: true
@@ -116,7 +116,7 @@ modules:
             row_offsets: []
 
     output:
-      out_dir: ../fp_files
+      out_dir: tables
       file: "{name}_dettable.h5"
       table_path: dettable_stack
       overwrite: true
@@ -175,7 +175,7 @@ modules:
             row_offsets: []
 
     output:
-      out_dir: ../fp_files
+      out_dir: tables
       file: "{name}_dettable.h5"
       table_path: dettable_stack
       overwrite: true
@@ -234,7 +234,7 @@ modules:
             row_offsets: []
 
     output:
-      out_dir: ../fp_files
+      out_dir: tables
       file: "{name}_dettable.h5"
       table_path: dettable_stack
       overwrite: true
@@ -294,7 +294,7 @@ modules:
             row_offsets: []
 
     output:
-      out_dir: ../fp_files
+      out_dir: tables
       file: "{name}_dettable.h5"
       table_path: dettable_stack
       overwrite: true
@@ -354,7 +354,7 @@ modules:
             row_offsets: []
 
     output:
-      out_dir: ../fp_files
+      out_dir: tables
       file: "{name}_dettable.h5"
       table_path: dettable_stack
       overwrite: true
@@ -414,7 +414,7 @@ modules:
             row_offsets: []
 
     output:
-      out_dir: ../fp_files
+      out_dir: tables
       file: "{name}_dettable.h5"
       table_path: dettable_stack
       overwrite: true

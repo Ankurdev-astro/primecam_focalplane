@@ -5,9 +5,11 @@ file using the configured output filename and table path.
 
 Usage
 -----
-Run from the repository root, selecting a module key from ``fp_config.yaml``::
+Select a module key from ``fp_config.yaml``::
 
-    python fp_scripts/fp_primecam.py fp_scripts/fp_config.yaml --module f280
+    python -m primecam_focalplane.fp_primecam fp_config.yaml --module f280
+
+Use ``--module all`` to build every module in YAML order.
 """
 
 from __future__ import annotations
@@ -300,6 +302,31 @@ class OutputConfig:
         return filename
 
 
+def _modules_from_yaml(config_path: Path) -> dict[str, Any]:
+    """Load and return the module entries from a configuration file."""
+
+    try:
+        with config_path.open("r", encoding="utf-8") as config_file:
+            raw = yaml.safe_load(config_file)
+    except OSError as error:
+        raise ConfigError(f"could not read {config_path}: {error}") from error
+    except yaml.YAMLError as error:
+        raise ConfigError(f"invalid YAML in {config_path}: {error}") from error
+
+    data = _mapping(raw, "configuration")
+    try:
+        modules = _mapping(data["modules"], "modules")
+    except KeyError as error:
+        raise ConfigError(
+            f"missing required configuration key: {error.args[0]}"
+        ) from error
+
+    for module_name in modules:
+        if not isinstance(module_name, str) or not module_name:
+            raise ConfigError("module keys must be non-empty strings")
+    return modules
+
+
 @dataclass(frozen=True)
 class PrimeCamConfig:
     detector: DetectorConfig
@@ -308,23 +335,15 @@ class PrimeCamConfig:
 
     @classmethod
     def from_yaml(cls, config_path: Path, module_name: str) -> "PrimeCamConfig":
-        try:
-            with config_path.open("r", encoding="utf-8") as config_file:
-                raw = yaml.safe_load(config_file)
-        except OSError as error:
-            raise ConfigError(f"could not read {config_path}: {error}") from error
-        except yaml.YAMLError as error:
-            raise ConfigError(f"invalid YAML in {config_path}: {error}") from error
+        modules = _modules_from_yaml(config_path)
+        if module_name not in modules:
+            available = ", ".join(sorted(modules))
+            raise ConfigError(
+                f"module '{module_name}' was not found; "
+                f"available modules: {available or 'none'}"
+            )
 
-        data = _mapping(raw, "configuration")
         try:
-            modules = _mapping(data["modules"], "modules")
-            if module_name not in modules:
-                available = ", ".join(sorted(str(name) for name in modules))
-                raise ConfigError(
-                    f"module '{module_name}' was not found; "
-                    f"available modules: {available or 'none'}"
-                )
             selected = _mapping(
                 modules[module_name], f"modules.{module_name}"
             )
@@ -340,7 +359,9 @@ class PrimeCamConfig:
                 ),
             )
         except KeyError as error:
-            raise ConfigError(f"missing required configuration key: {error.args[0]}") from error
+            raise ConfigError(
+                f"missing required configuration key: {error.args[0]}"
+            ) from error
 
 
 class PrimeCamFocalplane:
@@ -567,7 +588,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--module",
         required=True,
-        help="module key to build (for example, f280 or f350)",
+        help="module key to build (for example, f280 or f350), or 'all'",
     )
     return parser.parse_args()
 
@@ -576,9 +597,15 @@ def main() -> int:
     args = parse_args()
     config_path = args.config.expanduser().resolve()
     try:
-        config = PrimeCamConfig.from_yaml(config_path, args.module)
-        print(f"Building module: {args.module}")
-        PrimeCamFocalplane(config).write(config_path)
+        module_names = (
+            tuple(_modules_from_yaml(config_path))
+            if args.module == "all"
+            else (args.module,)
+        )
+        for module_name in module_names:
+            config = PrimeCamConfig.from_yaml(config_path, module_name)
+            print(f"Building module: {module_name}")
+            PrimeCamFocalplane(config).write(config_path)
     except ConfigError as error:
         raise SystemExit(f"Configuration error: {error}") from error
     return 0
