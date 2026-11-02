@@ -1,60 +1,87 @@
 # Prime-Cam Focal Plane
 
-Tools and data for constructing and visualizing the Prime-Cam detector focal
-plane for the Fred Young Submillimeter Telescope (FYST). The repository builds
-configuration-driven, TOAST-compatible detector tables for individual
-Prime-Cam modules and can place those modules in the telescope boresight frame.
+Tools and bundled detector tables for constructing and visualizing the
+Prime-Cam focal plane for the Fred Young Submillimeter Telescope (FYST). The
+code builds configuration-driven, TOAST-compatible detector tables and places
+individual Prime-Cam modules in the telescope boresight frame.
 
-## Repository contents
+## Repository layout
 
 | Path | Description |
 | --- | --- |
-| `fp_scripts/fp_config.yaml` | Detector, wafer, module, and output settings for each module. |
-| `fp_scripts/fp_primecam.py` | Builds an individual module detector table. |
-| `fp_scripts/module_to_boresight.py` | Converts module-relative detector quaternions to boresight-relative quaternions. |
-| `fp_scripts/visualize_fp.py` | Plotting helper for TOAST `Focalplane` objects. |
-| `fp_files/` | Generated HDF5 detector tables. |
-| `notebooks/visualize_fp_primecam.ipynb` | Example workflow for assembling and plotting the full focal plane. |
-| `plots/fp_primecam_tube.pdf` | Example full focal-plane plot. |
+| `src/primecam_focalplane/fp_primecam.py` | Builds detector tables from the YAML configuration. |
+| `src/primecam_focalplane/module_to_boresight.py` | Converts module-relative detector quaternions to boresight-relative quaternions. |
+| `src/primecam_focalplane/visualize_fp.py` | Plotting helper for TOAST `Focalplane` objects. |
+| `src/primecam_focalplane/fp_files/fp_config.yaml` | Detector, wafer, module, and output settings. |
+| `src/primecam_focalplane/fp_files/tables/` | HDF5 detector tables bundled with the package. |
+| `tests/` | Pytest test suite. |
+| `notebooks/` | Example workflows; not installed with the package. |
+| `plots/` | Example output plots; not installed with the package. |
 
 The configured module keys are `f280`, `f350`, `f420`, `f850`, `f_fake1`,
 `f_fake2`, and `f_fake3`.
 
-Note: Only the `f280` noise parameters are set now. All other modules are replicas of the `f280`.
+> **Note:** Only the `f280` noise parameters are currently set. The other
+> modules are replicas of `f280` pending their final parameters.
 
 ## Requirements
 
-The scripts require Python 3.10 or newer and the following packages:
+The code requires Python 3.10 or newer and these runtime packages:
 
 - NumPy
 - Astropy
 - PyYAML
 - TOAST
-- Matplotlib (for plots)
-- `fyst-trajectories` (for module-to-boresight offsets)
-- Jupyter (to run the example notebook)
+- `fyst-trajectories`
+- h5py
 
-This repository does not currently pin dependency versions. Install these
-packages in the Python environment of your choice before running the scripts or
-notebook.
+Matplotlib is required for plotting. Pytest is required only for running the
+test suite, and Jupyter is required only for the notebooks.
 
-## Build a detector table
+## Use from a source checkout
 
-Run `fp_scripts/fp_primecam.py` from the repository root, pass
-`fp_scripts/fp_config.yaml` as the configuration, and select a module with the
-required `--module` option. For example, use `--module f280` to build the 280
-GHz module.
+Until the project is installed as a package, add `src` to the Python search
+path when running a module from the repository root:
 
 ```bash
-python fp_scripts/fp_primecam.py fp_scripts/fp_config.yaml --module f280
+PYTHONPATH=src python -m primecam_focalplane.fp_primecam \
+    src/primecam_focalplane/fp_files/fp_config.yaml \
+    --module f280
 ```
 
-With the supplied configuration, this writes
-`fp_files/primecam_f280_dettable.h5`. The Astropy `QTable` is stored at the
-HDF5 path `dettable_stack`.
+In Python, import through the package name rather than through `src`:
 
-Run the command once for each module key to rebuild the complete set of
-configured tables.
+```python
+from primecam_focalplane.fp_primecam import PrimeCamFocalplane
+from primecam_focalplane.module_to_boresight import ModuleToBoresightOffset
+from primecam_focalplane.visualize_fp import plot_focalplane_primecam
+```
+
+When using a source checkout without installing it, set `PYTHONPATH=src` for
+the Python process. The test configuration does this automatically for pytest.
+
+## Build detector tables
+
+Select one YAML module key with `--module`:
+
+```bash
+PYTHONPATH=src python -m primecam_focalplane.fp_primecam \
+    src/primecam_focalplane/fp_files/fp_config.yaml \
+    --module f280
+```
+
+Build every configured module in YAML order with:
+
+```bash
+PYTHONPATH=src python -m primecam_focalplane.fp_primecam \
+    src/primecam_focalplane/fp_files/fp_config.yaml \
+    --module all
+```
+
+With the supplied configuration, the files are written to
+`src/primecam_focalplane/fp_files/tables/`. Each Astropy `QTable` is stored at
+the HDF5 path `dettable_stack`. These tables are package resources and are
+intended to be included in the wheel.
 
 The output table contains detector identity and placement fields (`name`,
 `quat`, `module`, `wafer_slot`, `band`, `pixel`, `pol`, and `index`) together
@@ -63,7 +90,7 @@ units are serialized with the table.
 
 ## Configuration
 
-Each entry under `modules` in `fp_scripts/fp_config.yaml` has three sections:
+Each entry under `modules` in `fp_config.yaml` has three sections:
 
 - `detector` defines the band, pixel layout, polarization pattern, beam,
   sampling rate, and noise properties.
@@ -77,13 +104,12 @@ the configured `module.name`.
 
 ## Convert modules to the boresight frame
 
-The generated tables describe detectors relative to each module center.
-`ModuleToBoresightOffset` in `fp_scripts/module_to_boresight.py` applies the
-module's static Prime-Cam position and returns a copy of the table. Construct it
-with a configured module name, such as `primecam_f280`, then call `apply()`.
+The bundled tables describe detectors relative to each module center.
+`ModuleToBoresightOffset` loads a configured table, applies the module's static
+Prime-Cam position, and returns a copy:
 
 ```python
-from fp_scripts.module_to_boresight import ModuleToBoresightOffset
+from primecam_focalplane.module_to_boresight import ModuleToBoresightOffset
 
 f280 = ModuleToBoresightOffset("primecam_f280")
 f280_boresight = f280.apply()
@@ -94,22 +120,40 @@ In the returned table:
 - `module_quat` preserves the original module-relative quaternion.
 - `quat` contains the boresight-relative quaternion.
 
-The current position assignments are defined in `MODULE_POSITIONS` in
-`fp_scripts/module_to_boresight.py`. Module clocking is currently assumed to be
-zero for every module and is kept explicitly in `MODULE_CLOCKING_DEG`; either
-update that mapping or pass `clocking_deg` to the constructor when measured
-values are available.
+The current position assignments are defined in `MODULE_POSITIONS`. Module
+clocking is currently assumed to be zero for every module and is recorded in
+`MODULE_CLOCKING_DEG`. Update that mapping or pass `clocking_deg` to the
+constructor when measured values are available.
 
-To assemble all seven modules, convert each module table and combine the
-results with Astropy's `vstack`. The notebook demonstrates this complete
-workflow.
+To assemble all seven modules, convert each table and combine the results with
+Astropy's `vstack`. The visualization notebook demonstrates this workflow.
 
 ## Visualize the focal plane
 
-Pass a detector table to TOAST's `Focalplane`, then call
-`plot_focalplane_primecam` from `fp_scripts/visualize_fp.py`.
+Pass a detector table to TOAST's `Focalplane`, then import the plotting helper:
+
+```python
+from primecam_focalplane.visualize_fp import plot_focalplane_primecam
+```
 
 Set `outfile=None` for an interactive Matplotlib window. Optional arguments can
 show detector labels, pixel centers, polarization directions, and per-module
 face colors. See `notebooks/visualize_fp_primecam.ipynb` for the complete
-multi-module conversion and visualization workflow.
+multi-module workflow.
+
+Example full Prime-Cam focal-plane visualization:
+
+![Prime-Cam focal-plane visualization](./plots/fp_primecam_tube.png)
+
+## Run tests
+
+Activate an environment containing the runtime dependencies and pytest, then
+run from the repository root:
+
+```bash
+python -m pytest
+```
+
+The suite validates configuration parsing, focal-plane construction,
+boresight conversion, and the presence and readability of every bundled HDF5
+table.
