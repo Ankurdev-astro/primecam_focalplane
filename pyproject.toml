@@ -15,7 +15,6 @@ dependencies = [
     "PyYAML",
     "toast",
     "fyst-trajectories",
-    "h5py",
 ]
 
 [project.optional-dependencies]

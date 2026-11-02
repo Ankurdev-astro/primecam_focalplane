@@ -33,7 +33,6 @@ The code requires Python 3.10 or newer and these runtime packages:
 - PyYAML
 - TOAST
 - `fyst-trajectories`
-- h5py
 
 Matplotlib is required for plotting. Pytest is required only for running the
 test suite, and Jupyter is required only for the notebooks.
