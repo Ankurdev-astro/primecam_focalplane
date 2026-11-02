@@ -2,3 +2,6 @@
 ./src/primecam_focalplane/__pycache__*
 ./tests/__pycache__*
 .pytest_cache/*
+build/
+dist/
+*.egg-info/

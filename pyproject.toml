@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "primecam-focalplane"
+version = "0.1.0"
+description = "Tools and detector tables for the Prime-Cam focal plane"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "BSD-3-Clause"
+dependencies = [
+    "numpy",
+    "astropy",
+    "PyYAML",
+    "toast",
+    "fyst-trajectories",
+    "h5py",
+]
+
+[project.optional-dependencies]
+plot = ["matplotlib"]
+test = ["pytest"]
+dev = ["build", "matplotlib", "pytest"]
+
+[project.scripts]
+primecam-focalplane = "primecam_focalplane.fp_primecam:main"
+
+[project.urls]
+Repository = "https://github.com/Ankurdev-astro/primecam_focalplane"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
+
+[tool.setuptools.package-data]
+primecam_focalplane = [
+    "fp_files/*.yaml",
+    "fp_files/tables/*.h5",
+]

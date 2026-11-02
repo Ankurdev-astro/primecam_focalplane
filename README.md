@@ -38,27 +38,34 @@ The code requires Python 3.10 or newer and these runtime packages:
 Matplotlib is required for plotting. Pytest is required only for running the
 test suite, and Jupyter is required only for the notebooks.
 
-## Use from a source checkout
+## Installation
 
-Until the project is installed as a package, add `src` to the Python search
-path when running a module from the repository root:
+From a local clone, install into the active Python or Conda environment:
 
 ```bash
-PYTHONPATH=src python -m primecam_focalplane.fp_primecam \
-    src/primecam_focalplane/fp_files/fp_config.yaml \
-    --module f280
+python -m pip install .
 ```
 
-In Python, import through the package name rather than through `src`:
+Install a tagged version directly from GitHub:
+
+```bash
+python -m pip install \
+    "git+https://github.com/Ankurdev-astro/primecam_focalplane.git@v0.1.0"
+```
+
+For an editable development installation with tests and plotting support:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+Import through the package name:
 
 ```python
 from primecam_focalplane.fp_primecam import PrimeCamFocalplane
 from primecam_focalplane.module_to_boresight import ModuleToBoresightOffset
 from primecam_focalplane.visualize_fp import plot_focalplane_primecam
 ```
-
-When using a source checkout without installing it, set `PYTHONPATH=src` for
-the Python process. The test configuration does this automatically for pytest.
 
 ## Build detector tables
 
